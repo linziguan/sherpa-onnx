@@ -16,6 +16,45 @@ echo "PATH: $PATH"
 which $EXE
 
 log "------------------------------------------------------------"
+log "Run NeMo transducer (English)"
+log "------------------------------------------------------------"
+repo_url=https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-nemo-streaming-fast-conformer-transducer-en-80ms.tar.bz2
+curl -SL -O $repo_url
+tar xvf sherpa-onnx-nemo-streaming-fast-conformer-transducer-en-80ms.tar.bz2
+rm sherpa-onnx-nemo-streaming-fast-conformer-transducer-en-80ms.tar.bz2
+repo=sherpa-onnx-nemo-streaming-fast-conformer-transducer-en-80ms
+
+log "Start testing ${repo_url}"
+
+waves=(
+$repo/test_wavs/0.wav
+$repo/test_wavs/1.wav
+$repo/test_wavs/8k.wav
+)
+
+for wave in ${waves[@]}; do
+  time $EXE \
+  --tokens=$repo/tokens.txt \
+  --encoder=$repo/encoder.onnx \
+  --decoder=$repo/decoder.onnx \
+  --joiner=$repo/joiner.onnx \
+  --num-threads=2 \
+  $wave
+done
+
+time $EXE \
+  --tokens=$repo/tokens.txt \
+  --encoder=$repo/encoder.onnx \
+  --decoder=$repo/decoder.onnx \
+  --joiner=$repo/joiner.onnx \
+  --num-threads=2 \
+  $repo/test_wavs/0.wav \
+  $repo/test_wavs/1.wav \
+  $repo/test_wavs/8k.wav
+
+rm -rf $repo
+
+log "------------------------------------------------------------"
 log "Run LSTM transducer (English)"
 log "------------------------------------------------------------"
 
@@ -47,7 +86,7 @@ for wave in ${waves[@]}; do
   time $EXE \
   --tokens=$repo/tokens.txt \
   --encoder=$repo/encoder-epoch-99-avg-1.int8.onnx \
-  --decoder=$repo/decoder-epoch-99-avg-1.int8.onnx \
+  --decoder=$repo/decoder-epoch-99-avg-1.onnx \
   --joiner=$repo/joiner-epoch-99-avg-1.int8.onnx \
   --num-threads=2 \
   $wave
@@ -87,7 +126,7 @@ for wave in ${waves[@]}; do
   time $EXE \
   --tokens=$repo/tokens.txt \
   --encoder=$repo/encoder-epoch-11-avg-1.int8.onnx \
-  --decoder=$repo/decoder-epoch-11-avg-1.int8.onnx \
+  --decoder=$repo/decoder-epoch-11-avg-1.onnx \
   --joiner=$repo/joiner-epoch-11-avg-1.int8.onnx \
   --num-threads=2 \
   $wave
@@ -129,7 +168,7 @@ for wave in ${waves[@]}; do
   time $EXE \
   --tokens=$repo/tokens.txt \
   --encoder=$repo/encoder-epoch-99-avg-1.int8.onnx \
-  --decoder=$repo/decoder-epoch-99-avg-1.int8.onnx \
+  --decoder=$repo/decoder-epoch-99-avg-1.onnx \
   --joiner=$repo/joiner-epoch-99-avg-1.int8.onnx \
   --num-threads=2 \
   $wave
@@ -171,7 +210,7 @@ for wave in ${waves[@]}; do
   time $EXE \
   --tokens=$repo/tokens.txt \
   --encoder=$repo/encoder-epoch-99-avg-1.int8.onnx \
-  --decoder=$repo/decoder-epoch-99-avg-1.int8.onnx \
+  --decoder=$repo/decoder-epoch-99-avg-1.onnx \
   --joiner=$repo/joiner-epoch-99-avg-1.int8.onnx \
   --num-threads=2 \
   $wave
@@ -192,7 +231,7 @@ if [ $EXE == "sherpa-onnx-ffmpeg" ]; then
   time $EXE \
   $repo/tokens.txt \
   $repo/encoder-epoch-99-avg-1.int8.onnx \
-  $repo/decoder-epoch-99-avg-1.int8.onnx \
+  $repo/decoder-epoch-99-avg-1.onnx \
   $repo/joiner-epoch-99-avg-1.int8.onnx \
   https://huggingface.co/csukuangfj/sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20/resolve/main/test_wavs/4.wav \
   2
@@ -232,7 +271,7 @@ for wave in ${waves[@]}; do
   time $EXE \
   --tokens=$repo/tokens.txt \
   --encoder=$repo/encoder-epoch-99-avg-1.int8.onnx \
-  --decoder=$repo/decoder-epoch-99-avg-1.int8.onnx \
+  --decoder=$repo/decoder-epoch-99-avg-1.onnx \
   --joiner=$repo/joiner-epoch-99-avg-1.int8.onnx \
   --num-threads=2 \
   $wave

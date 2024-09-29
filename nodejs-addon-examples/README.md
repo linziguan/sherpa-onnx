@@ -93,8 +93,10 @@ The following tables list the examples in this folder.
 |---|---|
 |[./test_asr_non_streaming_transducer.js](./test_asr_non_streaming_transducer.js)|Non-streaming speech recognition from a file with a Zipformer transducer model|
 |[./test_asr_non_streaming_whisper.js](./test_asr_non_streaming_whisper.js)| Non-streaming speech recognition from a file using [Whisper](https://github.com/openai/whisper)|
+|[./test_vad_with_non_streaming_asr_whisper.js](./test_vad_with_non_streaming_asr_whisper.js)| Non-streaming speech recognition from a file using [Whisper](https://github.com/openai/whisper) + [Silero VAD](https://github.com/snakers4/silero-vad)|
 |[./test_asr_non_streaming_nemo_ctc.js](./test_asr_non_streaming_nemo_ctc.js)|Non-streaming speech recognition from a file using a [NeMo](https://github.com/NVIDIA/NeMo) CTC model with greedy search|
 |[./test_asr_non_streaming_paraformer.js](./test_asr_non_streaming_paraformer.js)|Non-streaming speech recognition from a file using [Paraformer](https://github.com/alibaba-damo-academy/FunASR)|
+|[./test_asr_non_streaming_sense_voice.js](./test_asr_non_streaming_sense_voice.js)|Non-streaming speech recognition from a file using [SenseVoice](https://github.com/FunAudioLLM/SenseVoice)|
 
 ## Non-Streaming speech-to-text from a microphone with VAD
 
@@ -104,6 +106,7 @@ The following tables list the examples in this folder.
 |[./test_vad_asr_non_streaming_whisper_microphone.js](./test_vad_asr_non_streaming_whisper_microphone.js)|VAD + Non-streaming speech recognition from a microphone using [Whisper](https://github.com/openai/whisper)|
 |[./test_vad_asr_non_streaming_nemo_ctc_microphone.js](./test_vad_asr_non_streaming_nemo_ctc_microphone.js)|VAD + Non-streaming speech recognition from a microphone using a [NeMo](https://github.com/NVIDIA/NeMo) CTC model with greedy search|
 |[./test_vad_asr_non_streaming_paraformer_microphone.js](./test_vad_asr_non_streaming_paraformer_microphone.js)|VAD + Non-streaming speech recognition from a microphone using [Paraformer](https://github.com/alibaba-damo-academy/FunASR)|
+|[./test_vad_asr_non_streaming_sense_voice_microphone.js](./test_vad_asr_non_streaming_sense_voice_microphone.js)|VAD + Non-streaming speech recognition from a microphone using [SenseVoice](https://github.com/FunAudioLLM/SenseVoice)|
 
 ## Text-to-speech
 
@@ -140,9 +143,9 @@ node ./test_audio_tagging_zipformer.js
 ### Audio tagging with CED
 
 ```bash
-wget https://github.com/k2-fsa/sherpa-onnx/releases/download/audio-tagging-models/sherpa-onnx-ced-mini-audio-tagging-2024-04-19.tar.bz2
-tar xvf sherpa-onnx-ced-mini-audio-tagging-2024-04-19.tar.bz2
-rm sherpa-onnx-ced-mini-audio-tagging-2024-04-19.tar.bz2
+wget https://github.com/k2-fsa/sherpa-onnx/releases/download/audio-tagging-models/sherpa-onnx-ced-mini-audio-tagging-2024-09-14.tar.bz2
+tar xvf sherpa-onnx-ced-mini-audio-tagging-2024-09-14.tar.bz2
+rm sherpa-onnx-ced-mini-audio-tagging-2024-09-14.tar.bz2
 
 node ./test_audio_tagging_ced.js
 ```
@@ -219,9 +222,22 @@ rm sherpa-onnx-whisper-tiny.en.tar.bz2
 
 node ./test_asr_non_streaming_whisper.js
 
-# To run VAD + non-streaming ASR with Paraformer using a microphone
+# To run VAD + non-streaming ASR with Whisper using a microphone
 npm install naudiodon2
 node ./test_vad_asr_non_streaming_whisper_microphone.js
+```
+
+### Non-streaming speech recognition with Whisper + VAD
+
+```bash
+wget https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-whisper-tiny.en.tar.bz2
+tar xvf sherpa-onnx-whisper-tiny.en.tar.bz2
+rm sherpa-onnx-whisper-tiny.en.tar.bz2
+
+wget https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/Obama.wav
+wget https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/silero_vad.onnx
+
+node ./test_vad_with_non_streaming_asr_whisper.js
 ```
 
 ### Non-streaming speech recognition with NeMo CTC models
@@ -241,15 +257,29 @@ node ./test_vad_asr_non_streaming_nemo_ctc_microphone.js
 ### Non-streaming speech recognition with Paraformer
 
 ```bash
-wget https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-paraformer-zh-2023-03-28.tar.bz2
-tar xvf sherpa-onnx-paraformer-zh-2023-03-28.tar.bz2
-rm sherpa-onnx-paraformer-zh-2023-03-28.tar.bz2
+wget https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-paraformer-zh-2023-09-14.tar.bz2
+tar xvf sherpa-onnx-paraformer-zh-2023-09-14.tar.bz2
+rm sherpa-onnx-paraformer-zh-2023-09-14.tar.bz2
 
 node ./test_asr_non_streaming_paraformer.js
 
 # To run VAD + non-streaming ASR with Paraformer using a microphone
 npm install naudiodon2
 node ./test_vad_asr_non_streaming_paraformer_microphone.js
+```
+
+### Non-streaming speech recognition with SenseVoice
+
+```bash
+wget https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17.tar.bz2
+tar xvf sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17.tar.bz2
+rm sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17.tar.bz2
+
+node ./test_asr_non_streaming_sense_voice.js
+
+# To run VAD + non-streaming ASR with Paraformer using a microphone
+npm install naudiodon2
+node ./test_vad_asr_non_streaming_sense_voice_microphone.js
 ```
 
 ### Text-to-speech with piper VITS models (TTS)
